@@ -91,7 +91,7 @@ class SavingsPage extends Component<SavingsPageProps, SavingsPageState> {
 
         return (
             <div>
-                <h1>Savings projection</h1>
+                <h1>Savings projector</h1>
                 <div className="savings-page">
                     <div className="savings-page--chart-area">
                         <ResponsiveContainer width="100%" height="100%">
@@ -145,6 +145,7 @@ class SavingsPage extends Component<SavingsPageProps, SavingsPageState> {
                                 <li>the taxes to be paid <span className="info--code">taxes = yearlyReturns * taxOnReturns</span></li>
                                 <li>and the new savings total: <span className="info--code">newTotal = previousSavings + yearlyReturns - taxes + yearSavings</span></li>
                             </ol>
+                            <a href="https://github.com/gpiress/savings-projection" className="info-area--link">Check the code on Github.</a>
                         </div>
                     </div>
                 </div>

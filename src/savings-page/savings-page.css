@@ -30,12 +30,16 @@
 
 .info-area-block--footnote > a,
 .info-area-block--footnote > a:focus,
-.info-area-block--footnote > a:visited {
+.info-area-block--footnote > a:visited,
+.info-area--link,
+.info-area--link:focus,
+.info-area--link:visited {
     font-size: smaller;
     color: #333;
 }
 
-.info-area-block--footnote > a:hover {
+.info-area-block--footnote > a:hover,
+.info-area--link:hover {
     font-size: smaller;
     color: #333;
     cursor: pointer;
