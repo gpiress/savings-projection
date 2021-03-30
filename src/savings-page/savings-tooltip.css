@@ -1,0 +1,20 @@
+.custom-tooltip {
+    background-color: #fff;
+    padding: 5px 10px;
+    border-width: 1px;
+    border-color: #333;
+    border-style: solid;
+}
+
+.custom-tooltip--years {
+    font-weight: lighter;
+    text-transform: uppercase;
+}
+
+.custom-tooltip--values-list {
+    text-align: right;
+}
+
+.custom-tooltip--value {
+    width: fit-content;
+}
