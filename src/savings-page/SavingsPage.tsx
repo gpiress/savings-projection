@@ -12,8 +12,9 @@ interface SavingsPageState {
     relevantYears: Array<number>;
     totalSavingsData: Array<SavingsDataPoint>;
     averageYearlyReturn: number;
-    taxOnReturn: number;
+    taxOnTotal: number;
     initialCapital: number;
+    minimumMonthlyIncome: number;
 }
 
 interface SavingsPageProps {}
@@ -28,8 +29,9 @@ class SavingsPage extends Component<SavingsPageProps, SavingsPageState> {
             relevantYears: [0, 5, 10, 15, 20, 25, 30, 35, 40],
             totalSavingsData: [],
             averageYearlyReturn: 0.05,
-            taxOnReturn: 0.02,
+            taxOnTotal: 0.00375,
             initialCapital: 0,
+            minimumMonthlyIncome: 0,
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -40,8 +42,8 @@ class SavingsPage extends Component<SavingsPageProps, SavingsPageState> {
     }
 
     computeDataPoints() {
-        const { monthlySavings, relevantYears, averageYearlyReturn, taxOnReturn, initialCapital } = this.state
-        const dataPoints = simulate(initialCapital, monthlySavings, relevantYears, averageYearlyReturn, taxOnReturn);
+        const { monthlySavings, relevantYears, averageYearlyReturn, taxOnTotal, initialCapital } = this.state
+        const dataPoints = simulate(initialCapital, monthlySavings, relevantYears, averageYearlyReturn, taxOnTotal);
 
         this.setState({ totalSavingsData: dataPoints });
     }
@@ -55,13 +57,17 @@ class SavingsPage extends Component<SavingsPageProps, SavingsPageState> {
             this.setState({
                 averageYearlyReturn: value
             });
-        } else if (name === "taxOnReturn" && value >= 0 && value <= 1) {
+        } else if (name === "taxOnTotal" && value >= 0 && value <= 1) {
             this.setState({
-                taxOnReturn: value
+                taxOnTotal: value
             });
         } else if (name === "initialCapital" && value >= 0) {
             this.setState({
                 initialCapital: value
+            });
+        } else if (name === "minimumMonthlyIncome" && value >= 0) {
+            this.setState({
+                minimumMonthlyIncome: value
             });
         }
     }
@@ -89,6 +95,8 @@ class SavingsPage extends Component<SavingsPageProps, SavingsPageState> {
             );
         });
 
+        const retireSavings = (this.state.minimumMonthlyIncome * 12 * 25).toLocaleString('en-US', { style: 'currency', currency: 'SEK' });
+
         return (
             <div>
                 <h1>Savings projector</h1>
@@ -113,8 +121,8 @@ class SavingsPage extends Component<SavingsPageProps, SavingsPageState> {
                             </div>
 
                             <div className="info-area--block--input-area">
-                                <span>Taxes on return (0-1)</span>
-                                <input type="number" name="taxOnReturn" value={this.state.taxOnReturn} onChange={this.handleInputChange}></input>
+                                <span>Taxes on total (0-1)**</span>
+                                <input type="number" name="taxOnTotal" value={this.state.taxOnTotal} onChange={this.handleInputChange}></input>
                             </div>
 
                             <div className="info-area--block--input-area">
@@ -123,10 +131,25 @@ class SavingsPage extends Component<SavingsPageProps, SavingsPageState> {
                             </div>
 
                             <div className="info-area-block--footnote">
-                                <a href="https://www.investopedia.com/ask/answers/042415/what-average-annual-return-sp-500.asp">S&P 500 historical yearly return is roughly 8%</a>
+                                <a href="https://www.investopedia.com/ask/answers/042415/what-average-annual-return-sp-500.asp">* S&P 500 historical yearly return is roughly 8%</a>
+                                <br />
+                                <span>** Swedish ISK accounts yearly tax is 0.375% = 0.00375</span>
                             </div>
 
                             <button className="info-area--button" onClick={(event) => this.computeDataPoints()}>Render</button>
+                        </div>
+
+                        <div className="info-area--block">
+                            <span className="info-area--block-header"># Retire early</span>
+                            <div className="info-area--block--input-area">
+                                <span>Minimum monthly income</span>
+                                <input type="number" name="minimumMonthlyIncome" value={this.state.minimumMonthlyIncome} onChange={this.handleInputChange}></input>
+                            </div>
+
+                            <div className="info-area--block--input-area">
+                                <span>Amount needed to retire</span>
+                                <span>{retireSavings}</span>
+                            </div>
                         </div>
 
                         <div className="info-area--block">
@@ -142,9 +165,12 @@ class SavingsPage extends Component<SavingsPageProps, SavingsPageState> {
                             <p>For every year, it computes:</p>
                             <ol>
                                 <li>the yearly returns <code className="info--code">yearlyReturns = previousSavings * averageYearlyReturn</code>,</li>
-                                <li>the taxes to be paid <span className="info--code">taxes = yearlyReturns * taxOnReturns</span></li>
+                                <li>the taxes to be paid* <span className="info--code">taxes = (previousSavings + yearlyReturns) * taxOnTotal</span></li>
                                 <li>and the new savings total: <span className="info--code">newTotal = previousSavings + yearlyReturns - taxes + yearSavings</span></li>
                             </ol>
+                            <div className="info-area-block--footnote">
+                                <span>* Swedish ISK accounts pay yearly taxes based on the total amount in the account.</span>
+                            </div>
                             <a href="https://github.com/gpiress/savings-projection" className="info-area--link">Check the code on Github.</a>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 import SavingsDataPoint from "./SavingsDataPoint";
 
 
-const simulate = (initialCapital: number, monthlySavings: Array<number>, relevantYears: Array<number>, averageReturn: number, taxOnReturns: number)
+const simulate = (initialCapital: number, monthlySavings: Array<number>, relevantYears: Array<number>, averageReturn: number, taxOnTotal: number)
         : Array<SavingsDataPoint> => {
     let savingsDataPoints: Array<SavingsDataPoint> = [];
 
@@ -23,9 +23,9 @@ const simulate = (initialCapital: number, monthlySavings: Array<number>, relevan
             const yearly = savings * 12;
             const previous = totalSavings.get(savings) || 0;
             const returnOnPrevious = previous * averageReturn;
-            const returnMinusTaxes = returnOnPrevious * (1. - taxOnReturns);
+            const taxes = (previous + returnOnPrevious) * taxOnTotal;
 
-            const newTotal = yearly + previous + returnMinusTaxes;
+            const newTotal = yearly + previous + returnOnPrevious - taxes;
             totalSavings.set(savings, newTotal);
 
             savingsDataPoints.push({

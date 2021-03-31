@@ -21,16 +21,22 @@
     text-align: left;
 }
 
+.info-area--block {
+    margin-bottom: 20px;
+}
+
 .info-area--block-header {
     font-weight: 700;
     font-size: larger;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     display: block;
 }
 
+.info-area-block--footnote,
 .info-area-block--footnote > a,
 .info-area-block--footnote > a:focus,
 .info-area-block--footnote > a:visited,
+.info-area-block--footnote > span,
 .info-area--link,
 .info-area--link:focus,
 .info-area--link:visited {
